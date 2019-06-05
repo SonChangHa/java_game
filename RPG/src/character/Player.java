@@ -6,20 +6,18 @@ import equip_Item.*;
 
 public class Player extends Character {
 
-	public Monster monster;
 	public NPC npc;
 
-	public static Weapon weapon;
+	public Weapon weapon;
 	public Armor armor;
 	public MyMap nowmap;
 
-	public static ArrayList<Equip_item> armor_inventory;// 장비아이템
+	public ArrayList<Equip_item> armor_inventory;// 장비아이템
 	// static ArrayList<Use_item> Use_inventory;
 
 	public Player(String name, int hp, int mp, int ad, int dp, int criticalRate, int avd, int xLoca, int yLoca,
-			String art, MyMap nowmap) {
+			String art) {
 		super(name, hp, mp, ad, dp, criticalRate, avd, xLoca, yLoca, art);
-		this.nowmap = nowmap;
 	}
 
 	public void show_inventory() {
@@ -27,7 +25,7 @@ public class Player extends Character {
 	}
 
 	// 상대와 조우하였을때 전투 시작
-	public void monster_encounter() {
+	public void monster_encounter(Monster monster) {
 
 		Scanner scan = new Scanner(System.in);
 		int input;
@@ -45,9 +43,8 @@ public class Player extends Character {
 			if (monster.hp <= 0) {
 				// 몬스터 죽었음.
 				System.out.println("몬스터를 물리쳤습니다.");
-				MyMap.map[monster.yLoca][monster.xLoca] = this.art;
+				nowmap.map[monster.yLoca][monster.xLoca] = this.art;
 				monster = null;
-				MyMap.MonsterNum--;
 				return;
 			}
 			monster.monster_battle_att();

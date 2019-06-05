@@ -5,10 +5,14 @@ import java.util.Random;
 
 public class MyMap {
 
-	public static String[][] map;
+	public String[][] map; //이걸 시발 스태틱으로 놓으니까 안바뀌지 미친너마
 	public static Player player;
-	public static Monster monster;
-	public static int MonsterNum;// 필드에 남아있는 몬스터의 수
+	public Monster monster1;
+	public Monster monster2;
+	public Monster monster3;
+	public Monster monster4;
+	public Monster monster5;
+	//public int MonsterNum;// 필드에 남아있는 몬스터의 수
 	public int potalxLoca1;
 	public int potalyLoca1;
 	public int potalxLoca2;
@@ -21,74 +25,111 @@ public class MyMap {
 		this.map = map;
 
 		// 이하 코드들은 맵의 틀을 만드는 코드
-		for (int down = 0; down < map.length; down++) {
-			for (int side = 0; side < map[0].length; side++) {
-				map[down][side] = "-";
+		for (int down = 0; down < this.map.length; down++) {
+			for (int side = 0; side < this.map[0].length; side++) {
+				this.map[down][side] = "-";
 			}
 		}
 
-		for (int down = 0; down < map.length; down++) {
-			map[down][0] = "│";
-			map[down][map[0].length - 1] = "│";
+		for (int down = 0; down < this.map.length; down++) {
+			this.map[down][0] = "│";
+			this.map[down][this.map[0].length - 1] = "│";
 		}
 
-		for (int side = 0; side < map[0].length; side++) {
-			map[0][side] = "─";
-			map[map.length - 1][side] = "─";
+		for (int side = 0; side < this.map[0].length; side++) {
+			this.map[0][side] = "─";
+			this.map[this.map.length - 1][side] = "─";
 		}
 
-		map[0][0] = "┏";
-		map[map.length - 1][0] = "┗";
-		map[0][map[0].length - 1] = "┓";
-		map[map.length - 1][map[0].length - 1] = "┛";
+		this.map[0][0] = "┏";
+		this.map[this.map.length - 1][0] = "┗";
+		this.map[0][this.map[0].length - 1] = "┓";
+		this.map[this.map.length - 1][this.map[0].length - 1] = "┛";
 
 	}
 
+	
 	// 아래 함수들을 하나로 합쳐벌임
 	public void map_all(String move) {
 		
-		player.nowmap.map_player_move(move);
+		this.map_player_move(move);
 
 		// 만약 좌표가 같으면 몬스터랑 만남
-		if (player.xLoca == monster.xLoca && player.yLoca == monster.yLoca)
-			player.monster_encounter();
-
-		// 몬스터가 남아있으면 이동시키는 메소드 동작
-		if (MonsterNum != 0)
-			player.nowmap.map_monster_move();
+		// 시발이게머야
+		if(monster1 != null) {
+			if(player.xLoca == monster1.xLoca && player.yLoca == monster1.yLoca)
+			player.monster_encounter(monster1);
+		}
 		
-		if(player.xLoca == player.nowmap.potalxLoca1 && player.yLoca == player.nowmap.potalyLoca1)
+		if(monster2 != null) {
+			if(player.xLoca == monster2.xLoca && player.yLoca == monster2.yLoca)
+			player.monster_encounter(monster2);
+		}
+		
+		if(monster3 != null) {
+			if(player.xLoca == monster3.xLoca && player.yLoca == monster3.yLoca)
+			player.monster_encounter(monster3);
+		}
+		
+		if(monster4 != null) {
+			if(player.xLoca == monster4.xLoca && player.yLoca == monster4.yLoca)
+			player.monster_encounter(monster4);
+		}
+		
+		if(monster5 != null) {
+			if(player.xLoca == monster5.xLoca && player.yLoca == monster5.yLoca)
+			player.monster_encounter(monster5);
+		}
+		
+		// 몬스터가 남아있으면 이동시키는 메소드 동작
+		//근데 바로아래껀 굳이 없어도?
+		if(monster1 != null)
+			this.map_monster_move(monster1);
+		if(monster2 != null)
+			this.map_monster_move(monster2);
+		if(monster3 != null)
+			this.map_monster_move(monster3);
+		if(monster4 != null)
+			this.map_monster_move(monster4);
+		if(monster5 != null)
+			this.map_monster_move(monster5);
+		
+		if(player.xLoca == this.potalxLoca1 && player.yLoca == this.potalyLoca1)
 		{	
-			player.nowmap = player.nowmap.potalnext1;
+			player.nowmap = this.potalnext1;
 			player.xLoca = player.nowmap.potalxLoca1;
 			player.yLoca = player.nowmap.potalyLoca1;
 		}
 		
-		if(player.xLoca == player.nowmap.potalxLoca2 && player.yLoca == player.nowmap.potalyLoca2)
+		if(player.xLoca == this.potalxLoca2 && player.yLoca == this.potalyLoca2)
 		{
-			player.nowmap = player.nowmap.potalnext2;
+			player.nowmap = this.potalnext2;
 			player.xLoca = player.nowmap.potalxLoca2;
 			player.yLoca = player.nowmap.potalyLoca2;
 		}
 		// 움직였으면 출력을 해야제
 		// 근데 포탈에 닿으면 이 맵을 출력하는게 아니라 맵을 바꿔서 출력해야댐...
 		// 만약 포탈에 닿으면 store.map_print를 하지 않고 town.map_print를 한 후 포탈의 위치로 플레이어를 이동.
-		player.nowmap.map_print();
+		this.map_print();
 
 	}
 
+	
 	// 맵 출력하는 함수
 	public void map_print() {
 
 		for (int a = 0; a < 20; a++)
 			System.out.println();
+		
+		//포탈 표시해줌
+		this.map[potalyLoca1][potalxLoca1] = "@";
 
 		// 포탈에서 이동할때 한번 해주면 될듯
 		// this.map[player.yLoca][player.xLoca] = player.art;
 		// this.map[monster.yLoca][monster.xLoca] = monster.art;
-		for (int down = 0; down < map.length; down++) {
-			for (int side = 0; side < map[0].length; side++) {
-				System.out.print(map[down][side]);
+		for (int down = 0; down < player.nowmap.map.length; down++) {
+			for (int side = 0; side < player.nowmap.map[0].length; side++) {
+				System.out.print(player.nowmap.map[down][side]);
 			}
 			System.out.println();
 
@@ -99,10 +140,7 @@ public class MyMap {
 	public void map_player_move(String move) {
 
 		// 플레이어가 원래 있던 위치를 빈칸으로 초기화
-		player.nowmap.map[player.yLoca][player.xLoca] = "-";
-
-		// 포탈 오브젝트
-		player.nowmap.map[potalyLoca1][potalxLoca1] = "@";
+		this.map[player.yLoca][player.xLoca] = "-";
 
 		// wasd 입력에 따라 움직이는 것이 달라짐
 		switch (move) {
@@ -112,7 +150,6 @@ public class MyMap {
 				player.yLoca++;
 				System.out.println("그쪽으론 이동할 수 없습니다!");
 				System.out.println("다시 입력해주세요!");
-				return;
 			}
 			break;
 		case "a":
@@ -121,7 +158,6 @@ public class MyMap {
 				player.xLoca++;
 				System.out.println("그쪽으론 이동할 수 없습니다!");
 				System.out.println("다시 입력해주세요!");
-				return;
 			}
 			break;
 		case "s":
@@ -130,7 +166,6 @@ public class MyMap {
 				player.yLoca--;
 				System.out.println("그쪽으론 이동할 수 없습니다!");
 				System.out.println("다시 입력해주세요!");
-				return;
 			}
 			break;
 		case "d":
@@ -139,14 +174,12 @@ public class MyMap {
 				player.xLoca--;
 				System.out.println("그쪽으론 이동할 수 없습니다!");
 				System.out.println("다시 입력해주세요!");
-				return;
 			}
 			break;
 		default:
 			System.out.println("wasd이외의 것을 입력하였습니다.");
 			System.out.println("제발 하지말라는거 좀 하지말아주세요");
 			System.out.println("다시 입력해주세요. 후...");
-			return;
 		}
 
 		// 이동한 좌표에 플레이어 기호가 위치하도록
@@ -154,7 +187,7 @@ public class MyMap {
 
 	}
 
-	public void map_monster_move() {
+	public void map_monster_move(Monster monster) {
 
 		Random rand = new Random();
 		int ran1, ran2;
@@ -219,10 +252,5 @@ public class MyMap {
 		player.nowmap.map[monster.yLoca][monster.xLoca] = monster.art;
 
 	}
-
-	// 포탈타고 맵 이동 메소드
-	// public void map_move{
-
-	// }
 
 }

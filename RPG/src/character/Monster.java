@@ -5,11 +5,12 @@ import map.MyMap;
 public class Monster extends Character {
 
 	public static Player player;
+	public MyMap map;
 
 	public Monster(String name, int hp, int mp, int ad, int dp, int criticalRate, int avd, int xLoca, int yLoca,
 			String art) {
 		super(name, hp, mp, ad, dp, criticalRate, avd, xLoca, yLoca, art);
-		MyMap.MonsterNum++;
+		//map.MonsterNum++;
 	}
 
 	// 몬스터가 플레이어를 공격
