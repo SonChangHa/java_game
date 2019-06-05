@@ -7,17 +7,19 @@ import equip_Item.*;
 public class Player extends Character {
 
 	public Monster monster;
-	NPC npc;
+	public NPC npc;
 
 	public static Weapon weapon;
 	public Armor armor;
+	public MyMap nowmap;
 
 	public static ArrayList<Equip_item> armor_inventory;// 장비아이템
 	// static ArrayList<Use_item> Use_inventory;
 
 	public Player(String name, int hp, int mp, int ad, int dp, int criticalRate, int avd, int xLoca, int yLoca,
-			String art) {
+			String art, MyMap nowmap) {
 		super(name, hp, mp, ad, dp, criticalRate, avd, xLoca, yLoca, art);
+		this.nowmap = nowmap;
 	}
 
 	public void show_inventory() {

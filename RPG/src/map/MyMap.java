@@ -13,6 +13,9 @@ public class MyMap {
 	public int potalyLoca1;
 	public int potalxLoca2;
 	public int potalyLoca2;
+	
+	public MyMap potalnext1;
+	public MyMap potalnext2;
 
 	public MyMap(String map[][]) {
 		this.map = map;
@@ -43,23 +46,34 @@ public class MyMap {
 
 	// 아래 함수들을 하나로 합쳐벌임
 	public void map_all(String move) {
-
-		this.map_player_move(move);
+		
+		player.nowmap.map_player_move(move);
 
 		// 만약 좌표가 같으면 몬스터랑 만남
 		if (player.xLoca == monster.xLoca && player.yLoca == monster.yLoca)
 			player.monster_encounter();
 
-		// if(player.xLoca == Store.)
-
 		// 몬스터가 남아있으면 이동시키는 메소드 동작
 		if (MonsterNum != 0)
-			this.map_monster_move();
-
+			player.nowmap.map_monster_move();
+		
+		if(player.xLoca == player.nowmap.potalxLoca1 && player.yLoca == player.nowmap.potalyLoca1)
+		{	
+			player.nowmap = player.nowmap.potalnext1;
+			player.xLoca = player.nowmap.potalxLoca1;
+			player.yLoca = player.nowmap.potalyLoca1;
+		}
+		
+		if(player.xLoca == player.nowmap.potalxLoca2 && player.yLoca == player.nowmap.potalyLoca2)
+		{
+			player.nowmap = player.nowmap.potalnext2;
+			player.xLoca = player.nowmap.potalxLoca2;
+			player.yLoca = player.nowmap.potalyLoca2;
+		}
 		// 움직였으면 출력을 해야제
 		// 근데 포탈에 닿으면 이 맵을 출력하는게 아니라 맵을 바꿔서 출력해야댐...
 		// 만약 포탈에 닿으면 store.map_print를 하지 않고 town.map_print를 한 후 포탈의 위치로 플레이어를 이동.
-		this.map_print();
+		player.nowmap.map_print();
 
 	}
 
@@ -85,10 +99,10 @@ public class MyMap {
 	public void map_player_move(String move) {
 
 		// 플레이어가 원래 있던 위치를 빈칸으로 초기화
-		this.map[player.yLoca][player.xLoca] = "-";
+		player.nowmap.map[player.yLoca][player.xLoca] = "-";
 
 		// 포탈 오브젝트
-		this.map[potalyLoca1][potalxLoca1] = "@";
+		player.nowmap.map[potalyLoca1][potalxLoca1] = "@";
 
 		// wasd 입력에 따라 움직이는 것이 달라짐
 		switch (move) {
@@ -112,7 +126,7 @@ public class MyMap {
 			break;
 		case "s":
 			player.yLoca++;
-			if (player.yLoca == this.map.length - 1) {
+			if (player.yLoca == player.nowmap.map.length - 1) {
 				player.yLoca--;
 				System.out.println("그쪽으론 이동할 수 없습니다!");
 				System.out.println("다시 입력해주세요!");
@@ -121,7 +135,7 @@ public class MyMap {
 			break;
 		case "d":
 			player.xLoca++;
-			if (player.xLoca == this.map[0].length - 1) {
+			if (player.xLoca == player.nowmap.map[0].length - 1) {
 				player.xLoca--;
 				System.out.println("그쪽으론 이동할 수 없습니다!");
 				System.out.println("다시 입력해주세요!");
@@ -136,7 +150,7 @@ public class MyMap {
 		}
 
 		// 이동한 좌표에 플레이어 기호가 위치하도록
-		this.map[player.yLoca][player.xLoca] = player.art;
+		player.nowmap.map[player.yLoca][player.xLoca] = player.art;
 
 	}
 
@@ -149,7 +163,7 @@ public class MyMap {
 		ran2 = rand.nextInt(1);
 
 		// 몬스터가 원래 있던 곳을 초기화
-		this.map[monster.yLoca][monster.xLoca] = "-";
+		player.nowmap.map[monster.yLoca][monster.xLoca] = "-";
 
 		// ran2는 1혹은 0을 출력함. 만약 1이면 좌우, 0이면 상하로 이동
 		// ran1은 1,0,-1을 출력함 따라서 기존 좌표에 더해주어 좌우라면 왼쪽, 이동x, 오른쪽으로 이동시킴.
@@ -162,7 +176,7 @@ public class MyMap {
 				System.out.println(monster.yLoca);
 				System.out.println(ran1);
 				System.out.println(ran2);
-			} else if (monster.xLoca == this.map[0].length - 2) {
+			} else if (monster.xLoca == player.nowmap.map[0].length - 2) {
 				monster.xLoca--;
 				System.out.println("오른쪽 벽에 부딫힘");
 				System.out.println(monster.xLoca);
@@ -185,7 +199,7 @@ public class MyMap {
 				System.out.println(monster.yLoca);
 				System.out.println(ran1);
 				System.out.println(ran2);
-			} else if (monster.yLoca == this.map.length - 2) {
+			} else if (monster.yLoca == player.nowmap.map.length - 2) {
 				monster.yLoca--;
 				System.out.println("아래쪽 벽에 부딫힘");
 				System.out.println(monster.xLoca);
@@ -202,7 +216,7 @@ public class MyMap {
 			}
 		}
 
-		this.map[monster.yLoca][monster.xLoca] = monster.art;
+		player.nowmap.map[monster.yLoca][monster.xLoca] = monster.art;
 
 	}
 
