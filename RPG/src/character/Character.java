@@ -16,6 +16,9 @@ public class Character {
 	public int xLoca;
 	public int yLoca;// 각각 x, y 좌표
 	public String art;
+	
+	public int nowhp; 
+	public int nowmp;
 
 	Random rand = new Random();
 
@@ -33,6 +36,8 @@ public class Character {
 		this.xLoca = xLoca;
 		this.yLoca = yLoca;
 		this.art = art;
+		this.nowhp = hp; 
+		this.nowmp = mp;
 	}
 
 	// 크리티컬 적용 메소드

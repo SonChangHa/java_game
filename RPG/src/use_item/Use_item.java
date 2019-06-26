@@ -1,13 +1,15 @@
 package use_item;
 
+import character.Player;
+
 public class Use_item {
 
-	String name;
-	int weight;
+	public String name;
+	public int many;
+	public static Player player;
 
-	public Use_item(String name, int weight, int durability) {
+	public Use_item(String name) {
 		this.name = name;
-		this.weight = weight;
 	}
 
 }

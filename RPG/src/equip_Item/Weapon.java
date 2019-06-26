@@ -4,23 +4,37 @@ import character.Player;
 
 public class Weapon extends Equip_item {
 
-	int ad;
-	int criticalRate;
+	public int ad;
+	public int criticalRate;
 
-	Player player;
-
-	public Weapon(String name, int weight, int durability, int ad, int criticalRate, Player player_m) {
-		super(name, weight, durability);
+	public Weapon(String name, int ad, int criticalRate) {
+		super(name);
 		this.ad = ad;
 		this.criticalRate = criticalRate;
-		player = player_m;
 	}
 
-	public void Weapon_add() {
+	public static void weapon_equip(Weapon weapon) {
+		
+		for (int a = 0; a < 50; a++)
+			System.out.println();
+		
+		player.ad += player.weapon.ad;
+		player.criticalRate += player.weapon.criticalRate;
+		
+		System.out.println(player.weapon.name + "을 해제하였습니다.");
 
-		player.ad = this.ad + player.ad;
-		player.dp = this.criticalRate + player.criticalRate;
-		System.out.println("아이템을 장착하였습니다.");
+		player.weapon_inventory.add(player.weapon);
+
+		player.weapon = null;
+
+		player.weapon_inventory.remove(weapon);
+
+		player.ad += weapon.ad;
+		player.criticalRate += weapon.criticalRate;
+		player.weapon = weapon;
+		System.out.println(weapon.name + "을 장착하였습니다.");
+
 	}
+
 
 }

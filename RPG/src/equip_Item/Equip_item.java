@@ -1,15 +1,17 @@
 package equip_Item;
 
+import character.Player;
+
 public class Equip_item {
 
-	String name;
-	int weight;
-	int durability;
+	public static Player player;
+	
+	public String name;
+//	public int weight;
+	//public int durability;
 
-	public Equip_item(String name, int weight, int durability) {
+	public Equip_item(String name) {
 		this.name = name;
-		this.weight = weight;
-		this.durability = durability;
 	}
-
+	
 }

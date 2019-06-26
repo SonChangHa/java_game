@@ -1,6 +1,9 @@
 package character;
 
 import map.MyMap;
+import skill.*;
+import use_item.*;
+
 import java.util.*;
 import equip_Item.*;
 
@@ -11,16 +14,240 @@ public class Player extends Character {
 	public Weapon weapon;
 	public Armor armor;
 	public MyMap nowmap;
+	
+	public int gold;//µ·
+	public int lv;//·¹º§
+	public int exp;//°æÇèÄ¡
+	public int maxExp;//´Þ¼ºÇØ¾ßÇÏ´Â °æÇèÄ¡·®
 
-	public ArrayList<Equip_item> armor_inventory;// Àåºñ¾ÆÀÌÅÛ
-	// static ArrayList<Use_item> Use_inventory;
+	public ArrayList<Armor> armor_inventory = new ArrayList<Armor>();// Àåºñ¾ÆÀÌÅÛ
+	public ArrayList<Weapon> weapon_inventory = new ArrayList<Weapon>();// Àåºñ¾ÆÀÌÅÛ
+	public ArrayList<Portion> portion_inventory = new ArrayList<Portion>();// Æ÷¼Ç
+	public ArrayList<Heal> healskill_list = new ArrayList<Heal>();
+	public ArrayList<SkillBook> skillBook_inventory = new ArrayList<SkillBook>();
 
 	public Player(String name, int hp, int mp, int ad, int dp, int criticalRate, int avd, int xLoca, int yLoca,
 			String art) {
 		super(name, hp, mp, ad, dp, criticalRate, avd, xLoca, yLoca, art);
+		this.nowhp = hp;
+		this.nowmp = mp;
 	}
 
-	public void show_inventory() {
+	public void show_menu() {
+		Scanner scan = new Scanner(System.in);
+		int input;
+		for (int a = 0; a < 50; a++)
+			System.out.println();
+		System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+		System.out.println("ÇÃ·¹ÀÌ¾îÀÇ ÀÌ¸§ : " + this.name);
+		System.out.println("Ã¼·Â : " + this.nowhp + "/" + this.hp + ", ¸¶³ª : " + this.nowmp + "/" + this.mp);
+		System.out.println("°ø°Ý·Â : " + this.ad + ", ¹æ¾î·Â : " + this.dp);
+		System.out.println("Å©¸®Æ¼ÄÃ È®·ü : " + this.criticalRate + " %" + ", È¸ÇÇÀ² : " + this.avd + " %");
+		System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+		System.out.println("");
+		System.out.println("¾ÆÀÌÅÛ : 1, ½ºÅ³ : 2, ¸ÊÀ¸·Î µ¹¾Æ°¡±â : ±âÅ¸ ¼ýÀÚ");
+		System.out.println("¾î¶² Çàµ¿À» ÇÏ½Ã°Ú½À´Ï±î?");
+		input = scan.nextInt();
+		switch (input) {
+		case 1://Àåºñ
+			System.out.println("¹«±â : 1, ¹æ¾î±¸ : 2, Æ÷¼Ç : 3, ¸ÊÀ¸·Î µ¹¾Æ°¡±â : ±âÅ¸ ¼ýÀÚ");
+			input = scan.nextInt();
+			switch (input) {
+			case 1:
+				for (int a = 0; a < 50; a++)
+					System.out.println();
+				show_weapon();
+				break;
+			case 2:
+				for (int a = 0; a < 50; a++)
+					System.out.println();
+				show_armor();
+				break;
+			case 3:
+				for (int a = 0; a < 50; a++)
+					System.out.println();
+				show_portion();
+				break;
+			default:
+				return;
+			}
+			break;
+
+		case 2://½ºÅ³
+
+			System.out.println("È¸º¹½ºÅ³ : 1, ¸ÊÀ¸·Î µ¹¾Æ°¡±â : ±âÅ¸ ¼ýÀÚ");
+			input = scan.nextInt();
+			switch (input) {
+			case 1:
+				for (int a = 0; a < 50; a++)
+					System.out.println();
+				show_healskill();
+				break;
+			case 2:
+				for (int a = 0; a < 50; a++)
+					System.out.println();
+				// show_armor();
+				break;
+			case 3:
+				for (int a = 0; a < 50; a++)
+					System.out.println();
+				// show_portion();
+				break;
+			default:
+				return;
+			}
+
+		default:
+			return;
+		}
+
+	}
+
+	public void show_weapon() {
+		Scanner scan = new Scanner(System.in);
+		int input;
+		int i = 1;
+		while (true) {
+			i = 1;
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("ÇöÀç ÀåÂøÁßÀÎ ¹«±â : " + this.weapon.name);
+			System.out.println("Ãß°¡ °ø°Ý·Â : " + this.weapon.ad + ", Å©¸®Æ¼ÄÃ È®·ü : " + this.weapon.criticalRate);
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("");
+
+			// ¹«±â Ãâ·Â
+			System.out.println("¹«±â ÀÎº¥Åä¸®");
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			for (Weapon item : this.weapon_inventory) {
+				System.out.println(i + " : " + item.name + " = Ãß°¡ °ø°Ý·Â : " + item.ad + ", Å©¸®Æ¼ÄÃ È®·ü : " + item.criticalRate);
+				i++;
+			}
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+
+			System.out.println("¹«±â¸¦ ÀåÂøÇÏ°í ½ÍÀ¸½Ã¸é ¹«±âÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+			System.out.println("ÀÌ¿ÜÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇÏ¸é ¸ÊÀ¸·Î µ¹¾Æ°©´Ï´Ù.");
+			input = scan.nextInt();
+
+			if (input > 0 && input <= i)
+				Weapon.weapon_equip(weapon_inventory.get(input - 1));
+			else
+				break;
+
+			System.out.println("");
+		}
+	}
+
+	public void show_armor() {
+		Scanner scan = new Scanner(System.in);
+		int input, i = 1;
+		while (true) {
+			i = 1;
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("ÇöÀç ÀåÂøÁßÀÎ ¹æ¾î±¸ : " + this.armor.name);
+			System.out.println("Ãß°¡ Ã¼·Â : " + this.armor.hp + ", Ãß°¡ ¹æ¾î·Â : " + this.armor.dp + ", È¸ÇÇÀ² : " + this.armor.avd);
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("");
+
+			System.out.println("¹æ¾î±¸ ÀÎº¥Åä¸®");
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			for (Armor item : this.armor_inventory) {
+				System.out.println(i + " : " + item.name + " = Ãß°¡ Ã¼·Â : " + item.hp + ", Ãß°¡ ¹æ¾î·Â : " + item.dp
+						+ ", È¸ÇÇÀ² : " + item.avd);
+				i++;
+			}
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+
+			System.out.println("¹æ¾î±¸¸¦ ÀåÂøÇÏ°í ½ÍÀ¸½Ã¸é ¹æ¾î±¸ÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+			System.out.println("ÀÌ¿ÜÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇÏ¸é ¸ÊÀ¸·Î µ¹¾Æ°©´Ï´Ù.");
+			input = scan.nextInt();
+
+			if (input > 0 && input <= i)
+				Armor.armor_equip(armor_inventory.get(input - 1));
+			else
+				break;
+
+			System.out.println("");
+		}
+	}
+
+	public void show_portion() {
+		Scanner scan = new Scanner(System.in);
+		int input, i = 1;
+		while (true) {
+			i = 1;
+			System.out.println("Æ÷¼Ç ÀÎº¥Åä¸®");
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			for (Portion item : this.portion_inventory) {
+				System.out.println(i + " : " + item.name + " = °³¼ö : " + item.many + ", È¸º¹ Ã¼·Â : " + item.healHp
+						+ ", È¸º¹ ¸¶³ª : " + item.healMp);
+				i++;
+			}
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("Æ÷¼ÇÀ» »ç¿ëÇÏ°í ½ÍÀ¸½Ã¸é Æ÷¼ÇÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+			System.out.println("ÀÌ¿ÜÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇÏ¸é ¸ÊÀ¸·Î µ¹¾Æ°©´Ï´Ù.");
+			input = scan.nextInt();
+
+			if (input > 0 && input <= i && portion_inventory.size() != 0)
+				Portion.use_portion(portion_inventory.get(input - 1));
+			else
+				break;
+
+			System.out.println("");
+		}
+
+	}
+
+	public void show_skillbook() {
+		Scanner scan = new Scanner(System.in);
+		int input, i = 1;
+		while (true) {
+			i = 1;
+			System.out.println("½ºÅ³ºÏ ÀÎº¥Åä¸®");
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			for (SkillBook item : this.skillBook_inventory) {
+				System.out.println(i + " : " + item.name + " = ½ºÅ³ : " + item.skill.name);
+				i++;
+			}
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("½ºÅ³ºÏÀ» »ç¿ëÇÏ°í ½ÍÀ¸½Ã¸é ½ºÅ³ºÏÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+			System.out.println("ÀÌ¿ÜÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇÏ¸é ¸ÊÀ¸·Î µ¹¾Æ°©´Ï´Ù.");
+			input = scan.nextInt();
+
+			if (input > 0 && input <= i && skillBook_inventory.size() != 0)
+				SkillBook.use_skillbook(skillBook_inventory.get(input - 1));
+			else
+				break;
+
+			System.out.println("");
+		}
+
+	}
+
+	public void show_healskill() {
+		Scanner scan = new Scanner(System.in);
+		int input, i = 1;
+		while (true) {
+			i = 1;
+			System.out.println("È¸º¹ ½ºÅ³ ¸ñ·Ï");
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			for (Heal skill : this.healskill_list) {
+				System.out.println(i + " : " + skill.name + " = ¼Ò¸ð ¸¶³ª : " + skill.useMp + ", È¸º¹ Ã¼·Â :"
+						+ skill.skill_healHp + ", ½ºÅ³ ¼³¸í : " + skill.what);
+				i++;
+			}
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("È¸º¹ ½ºÅ³À» »ç¿ëÇÏ°í ½ÍÀ¸½Ã¸é ½ºÅ³ÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä.");
+			System.out.println("ÀÌ¿ÜÀÇ ¼ýÀÚ¸¦ ÀÔ·ÂÇÏ¸é ¸ÊÀ¸·Î µ¹¾Æ°©´Ï´Ù.");
+			input = scan.nextInt();
+
+			if (input > 0 && input <= i && healskill_list.size() != 0)
+				Heal.use_heal(healskill_list.get(input - 1));
+			else
+				break;
+
+			System.out.println("");
+
+		}
 
 	}
 
@@ -29,7 +256,7 @@ public class Player extends Character {
 
 		Scanner scan = new Scanner(System.in);
 		int input;
-		for (int a = 0; a < 20; a++)
+		for (int a = 0; a < 50; a++)
 			System.out.println();
 
 		System.out.println(monster.name + "°ú ¸¸³µ½À´Ï´Ù!");
@@ -38,9 +265,14 @@ public class Player extends Character {
 			System.out.println("°ø°Ý : 1, ½ºÅ³ : 2, ¾ÆÀÌÅÛ : 3, µµÁÖ : 4");
 			System.out.println("¾î¶² Çàµ¿À» ÇÏ½Ã°Ú½À´Ï±î?");
 			input = scan.nextInt();
+			
+			for (int a = 0; a < 50; a++)
+				System.out.println();
+			
 			if (input == 1)
-				this.player_battle_att();// ÇÃ·¹ÀÌ¾î´Â µ¿ÀÛÀÌ ´Ù¸£Áö¸¸ ¸ó½ºÅÍ´Â °ø°Ý¸¸ ÇÔ.
-			if (monster.hp <= 0) {
+				this.player_battle_att(monster);// ÇÃ·¹ÀÌ¾î´Â µ¿ÀÛÀÌ ´Ù¸£Áö¸¸ ¸ó½ºÅÍ´Â °ø°Ý¸¸ ÇÔ.
+				
+			if (monster.nowhp <= 0) {
 				// ¸ó½ºÅÍ Á×¾úÀ½.
 				System.out.println("¸ó½ºÅÍ¸¦ ¹°¸®ÃÆ½À´Ï´Ù.");
 				nowmap.map[monster.yLoca][monster.xLoca] = this.art;
@@ -48,45 +280,72 @@ public class Player extends Character {
 				return;
 			}
 			monster.monster_battle_att();
-			if (this.hp <= 0) {
+			if (this.nowhp <= 0) {
 				// ÇÃ·¹ÀÌ¾î Á×¾úÀ½. °ÔÀÓ¿À¹ö
 				System.out.println("ÇÃ·¹ÀÌ¾îÀÇ Ã¼·ÂÀÌ 0ÀÌ µÇ¾ú½À´Ï´Ù.");
 				System.out.println("°ÔÀÓ¿À¹ö");
 				System.exit(0);
 				return;
 			}
-			System.out.println(this.name + "ÀÇ ³²Àº Ã¼·ÂÀº " + this.hp);
-			System.out.println(monster.name + "ÀÇ ³²Àº Ã¼·ÂÀº " + monster.hp);
+			System.out.println(this.name + "ÀÇ ³²Àº Ã¼·ÂÀº " + this.nowhp + "/" + this.hp);
+			System.out.println(monster.name + "ÀÇ ³²Àº Ã¼·ÂÀº " + monster.nowhp + "/" + monster.hp);
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("");
 
-			for (int a = 0; a < 20; a++)
-				System.out.println();
 		}
 	}
 
-	public void npc_encounter() {
+	public void npc_encounter(NPC npc) {
 
-		// Á¶°ÇÀ» ³Ö¾î¾ßÇÔ. ¸· ½Î¿ï¼ø ¾øÀÚ³ª
-
-		for (int a = 0; a < 20; a++)
+		Scanner scan = new Scanner(System.in);
+		int input;
+		for (int a = 0; a < 50; a++)
 			System.out.println();
 
-		System.out.println(npc.name + "¿Í ÀüÅõ½ÃÀÛ!");
+		System.out.println(npc.name + "°ú ¸¸³µ½À´Ï´Ù!");
+		System.out.println("ÀÚ³× µµµ¥Ã¼ ¹«½¼ÁþÀÎ°¡?");
 
-		while (this.hp >= 0 || npc.hp >= 0) {
-			player_battle_att();
-			NPC.NPC_battle_att();// NPC°¡ ¶§¸®´Â°Ç ¿Ö ¾È³Ö¾ú³Ä.
+		while (true) {
+			System.out.println("°ø°Ý : 1, ½ºÅ³ : 2, ¾ÆÀÌÅÛ : 3, µµÁÖ : 4");
+			System.out.println("¾î¶² Çàµ¿À» ÇÏ½Ã°Ú½À´Ï±î?");
+			input = scan.nextInt();
+			
+			if (input == 1)
+				this.player_battle_att(npc);// ÇÃ·¹ÀÌ¾î´Â µ¿ÀÛÀÌ ´Ù¸£Áö¸¸ ¸ó½ºÅÍ´Â °ø°Ý¸¸ ÇÔ.
+			if (npc.nowhp <= 0) {
+				// ¸ó½ºÅÍ Á×¾úÀ½.
+				System.out.println("´ç½ÅÀº " + npc.name + "¸¦ Á×¿´½À´Ï´Ù.");
+				nowmap.map[npc.yLoca][npc.xLoca] = this.art;
+				npc = null;
+				return;
+			}
+			npc.NPC_battle_att();
+			if (this.nowhp <= 0) {
+				// ÇÃ·¹ÀÌ¾î Á×¾úÀ½. °ÔÀÓ¿À¹ö
+				System.out.println("ÇÃ·¹ÀÌ¾îÀÇ Ã¼·ÂÀÌ 0ÀÌ µÇ¾ú½À´Ï´Ù.");
+				System.out.println("°ÔÀÓ¿À¹ö");
+				System.exit(0);
+				return;
+			}
+			System.out.println(this.name + "ÀÇ ³²Àº Ã¼·ÂÀº " + this.nowhp + "/" + this.hp);
+			System.out.println(npc.name + "ÀÇ ³²Àº Ã¼·ÂÀº " + npc.nowhp + "/" + npc.hp);
+			System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
+			System.out.println("");
+
 		}
 	}
 
-	public void player_battle_att() {
-
+	public void player_battle_att(Character monster) {
+		
+		System.out.println("");
+		System.out.println("¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡");
 		System.out.println(this.name + "ÀÇ °ø°Ý!");
 
 		this.damage = this.ad - monster.dp; // µ¥¹ÌÁö´Â °ø°Ý·Â - ¹æ¾î·Â
 
 		if (this.ad <= monster.dp) { // ¹æ¾î·ÂÀÌ ³ôÀ¸¸é µ©Áö 1
 			this.damage = 1;
-			monster.hp -= this.damage;
+			monster.nowhp -= this.damage;
 			System.out.println("-" + this.damage + "!!!");
 			return;
 		}
@@ -95,7 +354,7 @@ public class Player extends Character {
 
 		battle_Avoid(); // È¸ÇÇ
 
-		monster.hp -= this.damage; // ³²Àº HP´Â HP »©±â µ¥¹ÌÁö·Î
+		monster.nowhp -= this.damage; // ³²Àº HP´Â HP »©±â µ¥¹ÌÁö·Î
 		System.out.println("-" + this.damage + "!!!");
 	}
 
