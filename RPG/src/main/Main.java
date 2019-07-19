@@ -8,10 +8,10 @@ import script.Script;
 import skill.*;
 import use_item.*;
 
-public class Main {
-
+public class Main extends Thread {
+	
 	public static void main(String[] args) {
-
+		
 		Scanner scan = new Scanner(System.in);
 
 		String move;
@@ -26,6 +26,7 @@ public class Main {
 		Use_item.player = player;
 		Skill.player = player;
 		Script.player = player;
+		Battle_thread.player = player;
 		
 		Script script = new Script();
 
@@ -43,16 +44,27 @@ public class Main {
 		
 		// 무기 객체 생성(이름, ad, cri)
 		Weapon noweapon = new Weapon("맨손", 1, 1);
+		Weapon startsword = new Weapon("시작의 검", 10, 10);
 
 		
 		
 		// 몬스터 객체 생성(이름, hp, mp, ad, dp, cri, avd, x좌표, y좌표, 표시문자)
 		Monster slime = new Monster("슬라임", 30, 10, 20, 10, 10, 10, 3, 5, "0");
+		//Monster slime = new Monster("슬라임", 30, 10, 20, 10, 10, 10, 3, 5, "0");
+		//Monster slime = new Monster("슬라임", 30, 10, 20, 10, 10, 10, 3, 5, "0");
+		//Monster slime = new Monster("슬라임", 30, 10, 20, 10, 10, 10, 3, 5, "0");
+		
+		
+		//보스몬스터
+		Monster rockBoss = new Monster("고벨리누스", 100, 100, 30, 5, 30, 30, 5, 1, "#");
+		
+		
 		
 		
 		//NPC 객체 생성(이름, hp, mp, ad, dp, cri, avd, x좌표, y좌표, 표시문자, 타입)
 		//타입이 1이면 상인 2이면 일반
-		NPC elder = new NPC("이장", 10, 10, 1, 1, 1, 1, 7, 7, "!", 2);
+		NPC elder = new NPC("이장", 10, 10, 1, 1, 1, 1, 7, 7, "!");
+		NPC elf = new NPC("요정", 1, 1, 1, 1, 1, 1, 5, 5, "!");
 		
 
 		// 포션 객체 생성(이름, 개수, 회복체력, 회복마나)
@@ -65,33 +77,40 @@ public class Main {
 		SkillBook lowhealbook = new SkillBook("하급회복 책", smallHeal);
 
 		// 맵 객체 생성(new String[y길이][x길이], 이름, 포탈1 x좌표, y좌표, 포탈2 x, 포탈2 y, 포탈1 연결맵, 2 연결맵, 몹 1,2,3,4,5)
-		Twopotal town = new Twopotal(new String[10][20], "마을", 6, 6, 8, 8, null, null);
+		Twopotal town = new Twopotal(new String[10][20], "마을", 6, 6, 8, 1, null, null);
 		Onepotal home = new Onepotal(new String[10][10], "스윗홈", 5, 1, town);
 		Onepotal nothing = new Onepotal(new String[3][3], "이동의 방", 1, 1, town);
 		Onepotal pond = new Onepotal(new String[10][15], "연못", 5, 1, town);
+		Twopotal rock1 = new Twopotal(new String[15][10], "바위산 1", 5, 13, 5, 1, town, null);
+		Twopotal rock2 = new Twopotal(new String[15][10], "바위산 2", 5, 13, 5, 1, rock1, null);
+		Onepotal rock3 = new Onepotal(new String[15][10], "바위산 3", 5, 13, rock2);
+		
+		rock1.potalnext2 = rock2;
+		rock2.potalnext2 = rock3;
 		
 		
 		town.potalnext1 = home;
 		town.potalnext2 = nothing;
-		
 		town.npc1 = elder;
 		
+		
 		pond.monster1 = slime;
+		pond.npc1 = elf;
 		
-		
+		rock3.monster1 = rockBoss;
 		
 		
 		
 		
 		
 		//최초맵 지정
-		player.nowmap = home;
+		player.nowmap = rock2;
 		
 		//최초 방어구 지정
-		player.armor_inventory.add(noarmor);
+		//player.armor_inventory.add(noarmor);
 		player.armor = noarmor;
 		//최초 무기 지정
-		player.weapon_inventory.add(noweapon);
+		//player.weapon_inventory.add(noweapon);
 		player.weapon = noweapon;
 		
 		
@@ -122,7 +141,7 @@ public class Main {
 		player.nowmap.map_print();
 		
 		
-	
+		Battle_thread thread = new Battle_thread();
 		
 		
 		
@@ -133,6 +152,8 @@ public class Main {
 			
 			if(player.nowmap == nothing) {
 				System.out.println("이동하고 싶은 던전을 입력해주세요.");
+				System.out.println("1 : 연못");
+				System.out.println("2 : 바위산");
 				select = scan.nextInt();
 				
 			if(select == 1) {
@@ -144,6 +165,17 @@ public class Main {
 
 				player.nowmap.map[player.yLoca][player.xLoca] = player.art;
 				player.nowmap.map_print();
+			}
+			else if(select == 2) {
+				town.potalnext2 = rock1;
+				player.nowmap = rock1;
+
+				player.xLoca = player.nowmap.potalxLoca1;
+				player.yLoca = player.nowmap.potalyLoca1;
+
+				player.nowmap.map[player.yLoca][player.xLoca] = player.art;
+				player.nowmap.map_print();
+				
 			}
 				
 			}
@@ -165,6 +197,39 @@ public class Main {
 				script.elder_start_cheak = false;
 				elder.art = "*";
 			}
+			
+
+			if(player.nowmap == pond && player.xLoca == elf.xLoca && player.yLoca == elf.yLoca && elf.art.equals("!")) {
+				System.out.println("====================================");
+				System.out.println("요정 : 당신이 새로운 용사가 될 사람인가 보군요");
+				System.out.println("요정 : 반갑습니다 용사여.");
+				System.out.println("요정 : 이 검을 받고 당신의 운명을 수행하세요.");
+				player.weapon_inventory.add(startsword);
+				System.out.println("인벤토리에 시작의 검이 추가되었습니다.");
+				System.out.println("요정 : 안녕히가세요 용사여. 당신의 운명에 희망이 있길 빕니다.");
+				System.out.println("====================================");
+				elf.art = "*";
+			}
+			
+			if(player.nowmap == rock3 && thread.rockBoss_start_cheak == true) {
+				thread.rockBoss_start_cheak = false;
+				thread.monster = rockBoss;
+				thread.start();
+			/*	while (!Battle_thread.thread_end) {
+					try {
+						sleep(1000);
+						System.out.println("메인쓰레드 정지중");
+					} catch (Exception e) {
+
+					}
+				}*/
+			}
+			
+			
+			
+			
+			
+			
 			
 			System.out.println("이동하려면 wasd, 메뉴로 들어가시려면 1을 입력해주세요.");
 			move = scan.next();//자바 개새끼 진짜 Line쓰면 개행문자 머시기땜에 안되고 걍 넥스트 쓰셈

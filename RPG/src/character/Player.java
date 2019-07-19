@@ -8,17 +8,15 @@ import java.util.*;
 import equip_Item.*;
 
 public class Player extends Character {
-
+	
+	public int nowhp; 
+	public int nowmp;
+	
 	public NPC npc;
 
 	public Weapon weapon;
 	public Armor armor;
 	public MyMap nowmap;
-	
-	public int gold;//돈
-	public int lv;//레벨
-	public int exp;//경험치
-	public int maxExp;//달성해야하는 경험치량
 
 	public ArrayList<Armor> armor_inventory = new ArrayList<Armor>();// 장비아이템
 	public ArrayList<Weapon> weapon_inventory = new ArrayList<Weapon>();// 장비아이템
@@ -252,6 +250,8 @@ public class Player extends Character {
 	}
 
 	// 상대와 조우하였을때 전투 시작
+	
+	//매개변수를 null로 바꾸면 슬라임도 널이 된다?
 	public void monster_encounter(Monster monster) {
 
 		Scanner scan = new Scanner(System.in);
@@ -269,13 +269,33 @@ public class Player extends Character {
 			for (int a = 0; a < 50; a++)
 				System.out.println();
 			
-			if (input == 1)
+			switch (input) {
+			case 1:
 				this.player_battle_att(monster);// 플레이어는 동작이 다르지만 몬스터는 공격만 함.
+				break;
+				
+			case 2:
+				this.show_healskill();
+				break;
+			
+			case 3:
+				this.show_portion();
+				break;
+				
+				
+
+			default:
+				System.out.println("간신히 도망쳤습니다!");
+				this.nowmap.map[this.yLoca][this.xLoca] = this.art;
+				return;
+			}
+			
+			
 				
 			if (monster.nowhp <= 0) {
 				// 몬스터 죽었음.
 				System.out.println("몬스터를 물리쳤습니다.");
-				nowmap.map[monster.yLoca][monster.xLoca] = this.art;
+				this.nowmap.map[monster.yLoca][monster.xLoca] = this.art;
 				monster = null;
 				return;
 			}

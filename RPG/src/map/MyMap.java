@@ -67,19 +67,7 @@ public class MyMap {
 
 		// 몬스터가 남아있으면 이동시키는 메소드 동작
 				// 근데 바로아래껀 굳이 없어도?
-				if (monster1 != null)
-					this.map_monster_move(monster1);
-				if (monster2 != null)
-					this.map_monster_move(monster2);
-				if (monster3 != null)
-					this.map_monster_move(monster3);
-				if (monster4 != null)
-					this.map_monster_move(monster4);
-				if (monster5 != null)
-					this.map_monster_move(monster5);
 		
-		// 만약 좌표가 같으면 몬스터랑 만남
-		// 시발이게머야
 		if (monster1 != null) {
 			if (player.xLoca == monster1.xLoca && player.yLoca == monster1.yLoca)
 				player.monster_encounter(monster1);
@@ -104,6 +92,20 @@ public class MyMap {
 			if (player.xLoca == monster5.xLoca && player.yLoca == monster5.yLoca)
 				player.monster_encounter(monster5);
 		}
+		
+				if (monster1 != null)
+					this.map_monster_move(monster1);
+				if (monster2 != null)
+					this.map_monster_move(monster2);
+				if (monster3 != null)
+					this.map_monster_move(monster3);
+				if (monster4 != null)
+					this.map_monster_move(monster4);
+				if (monster5 != null)
+					this.map_monster_move(monster5);
+		
+		// 만약 좌표가 같으면 몬스터랑 만남
+		// 시발이게머야
 
 
 		if (player.xLoca == this.potalxLoca1 && player.yLoca == this.potalyLoca1) {

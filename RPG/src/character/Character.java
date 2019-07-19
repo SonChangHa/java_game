@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Character {
 
-	String name;
+	public String name;
 	public int hp; // 설명필요?
 	public int mp;
 	public int ad; // 공격력
@@ -12,7 +12,6 @@ public class Character {
 	public int criticalRate; // 크확
 	public int avd; // 회피율
 	public int damage; // 뎀지
-	// public String loca[][];//맵에서의 좌표 를 2차원배열로 만들면 안됨.
 	public int xLoca;
 	public int yLoca;// 각각 x, y 좌표
 	public String art;

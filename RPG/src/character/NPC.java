@@ -6,13 +6,10 @@ import map.MyMap;
 
 public class NPC extends Character {
 
-	public int NPCtype; //1이면 상인 2이면 일반NPC 
 	public static Player player;
 
-	public NPC(String name, int hp, int mp, int ad, int dp, int criticalRate, int avd, int xLoca, int yLoca, String art,
-			int NPCtype) {
+	public NPC(String name, int hp, int mp, int ad, int dp, int criticalRate, int avd, int xLoca, int yLoca, String art) {
 		super(name, hp, mp, ad, dp, criticalRate, avd, xLoca, yLoca, art);
-		this.NPCtype = NPCtype;
 		this.nowhp = hp;
 		this.nowmp = mp;
 	}
@@ -39,7 +36,7 @@ public class NPC extends Character {
 		System.out.println("-" + this.damage + "!!!");
 	}
 	
-	public void metStore(NPC npc) {
+/*	public void metStore(NPC npc) {
 		System.out.println("어서와!");
 		System.out.println("물건을 구매하고싶으면 1, 아니면 아무 숫자나 눌러줘!");
 		Scanner scan = new Scanner(System.in);
@@ -51,7 +48,7 @@ public class NPC extends Character {
 		}
 		else
 			return;
-	}
+	}*/
 	
 	
 	
