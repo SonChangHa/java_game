@@ -13,28 +13,6 @@ public class NPC extends Character {
 		this.nowhp = hp;
 		this.nowmp = mp;
 	}
-
-	public void NPC_battle_att() {
-
-		System.out.println(this.name + "의 공격!!");
-
-		this.damage = this.ad - player.dp; // 데미지는 공격력 - 방어력
-
-		// 플레이어의 방어력이 높으면 데미지 1
-		if (this.ad <= player.dp) {
-			this.damage = 1;
-			player.nowhp -= this.damage;
-			System.out.println("-" + this.damage + "!!!");
-			return;
-		}
-
-		battle_critical(); // 크리티컬
-
-		battle_Avoid(); // 회피
-
-		player.nowhp -= this.damage; // 남은 HP는 HP 빼기 데미지로
-		System.out.println("-" + this.damage + "!!!");
-	}
 	
 /*	public void metStore(NPC npc) {
 		System.out.println("어서와!");

@@ -6,8 +6,11 @@ import use_item.*;
 
 import java.util.*;
 import equip_Item.*;
+import main.Battle_thread;
 
 public class Player extends Character {
+	
+	public boolean battleSwitch = false;
 	
 	public int nowhp; 
 	public int nowmp;
@@ -253,7 +256,9 @@ public class Player extends Character {
 	
 	//매개변수를 null로 바꾸면 슬라임도 널이 된다?
 	public void monster_encounter(Monster monster) {
-
+		
+		battleSwitch = true;
+		
 		Scanner scan = new Scanner(System.in);
 		int input;
 		for (int a = 0; a < 50; a++)
@@ -262,7 +267,7 @@ public class Player extends Character {
 		System.out.println(monster.name + "과 만났습니다!");
 
 		while (true) {
-			System.out.println("공격 : 1, 스킬 : 2, 아이템 : 3, 도주 : 4");
+			System.out.println("공격 : 1, 몬스터 정보 : 2, 스킬 : 3, 아이템 : 4, 도주 : 5");
 			System.out.println("어떤 행동을 하시겠습니까?");
 			input = scan.nextInt();
 			
@@ -275,10 +280,14 @@ public class Player extends Character {
 				break;
 				
 			case 2:
+				this.show_monster(monster);
+				continue;
+				
+			case 3:
 				this.show_healskill();
 				break;
 			
-			case 3:
+			case 4:
 				this.show_portion();
 				break;
 				
@@ -297,6 +306,7 @@ public class Player extends Character {
 				System.out.println("몬스터를 물리쳤습니다.");
 				this.nowmap.map[monster.yLoca][monster.xLoca] = this.art;
 				monster = null;
+				battleSwitch = false;
 				return;
 			}
 			monster.monster_battle_att();
@@ -315,7 +325,16 @@ public class Player extends Character {
 		}
 	}
 
-	public void npc_encounter(NPC npc) {
+	public void show_monster(Monster monster) {
+		System.out.println("────────────────────────────");
+		System.out.println(monster.name);
+		System.out.println("공격력 : " + monster.ad + ", 방어력 : " + monster.dp);
+		System.out.println("크리티컬 확률 : " + monster.criticalRate + ", 회피율 : " + monster.avd);
+		System.out.println(monster.name + "의 남은 체력은 " + monster.nowhp + "/" + monster.hp);
+		System.out.println("────────────────────────────");
+	}
+	
+	/*public void npc_encounter(NPC npc) {
 
 		Scanner scan = new Scanner(System.in);
 		int input;
@@ -353,7 +372,7 @@ public class Player extends Character {
 			System.out.println("");
 
 		}
-	}
+	}*/
 
 	public void player_battle_att(Character monster) {
 		

@@ -93,15 +93,15 @@ public class MyMap {
 				player.monster_encounter(monster5);
 		}
 		
-				if (monster1 != null)
+				if (monster1 != null && monster1.art.equals("0"))
 					this.map_monster_move(monster1);
-				if (monster2 != null)
+				if (monster2 != null && monster2.art.equals("0"))
 					this.map_monster_move(monster2);
-				if (monster3 != null)
+				if (monster3 != null && monster3.art.equals("0"))
 					this.map_monster_move(monster3);
-				if (monster4 != null)
+				if (monster4 != null && monster4.art.equals("0"))
 					this.map_monster_move(monster4);
-				if (monster5 != null)
+				if (monster5 != null && monster5.art.equals("0"))
 					this.map_monster_move(monster5);
 		
 		// 만약 좌표가 같으면 몬스터랑 만남

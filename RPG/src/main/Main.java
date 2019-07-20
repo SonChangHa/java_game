@@ -18,7 +18,7 @@ public class Main extends Thread {
 		int select = 0;
 		
 		// 플레이어 객체 생성(이름, hp, mp, ad, dp, cri, avd, x좌표, y좌표, 표시문자
-		Player player = new Player("김용사", 100, 100, 30, 10, 0, 0, 1, 1, "+");
+		Player player = new Player("김용사", 10000, 100, 30, 10, 0, 0, 1, 1, "+");
 		// 플레이어는 바뀌지 않는 값이니까 스태틱 선언해도됌
 		Monster.player = player;
 		MyMap.player = player;
@@ -64,6 +64,8 @@ public class Main extends Thread {
 		//NPC 객체 생성(이름, hp, mp, ad, dp, cri, avd, x좌표, y좌표, 표시문자, 타입)
 		//타입이 1이면 상인 2이면 일반
 		NPC elder = new NPC("이장", 10, 10, 1, 1, 1, 1, 7, 7, "!");
+		NPC snow = new NPC("설화", 10, 10, 1, 1, 1, 1, 4, 3, "!");
+		
 		NPC elf = new NPC("요정", 1, 1, 1, 1, 1, 1, 5, 5, "!");
 		
 
@@ -209,21 +211,16 @@ public class Main extends Thread {
 				System.out.println("요정 : 안녕히가세요 용사여. 당신의 운명에 희망이 있길 빕니다.");
 				System.out.println("====================================");
 				elf.art = "*";
+				script.metElf = true;
 			}
 			
 			if(player.nowmap == rock3 && thread.rockBoss_start_cheak == true) {
-				thread.rockBoss_start_cheak = false;
 				thread.monster = rockBoss;
 				thread.start();
-			/*	while (!Battle_thread.thread_end) {
-					try {
-						sleep(1000);
-						System.out.println("메인쓰레드 정지중");
-					} catch (Exception e) {
-
-					}
-				}*/
+				thread.rockBoss_start_cheak = false;
 			}
+			
+			
 			
 			
 			
