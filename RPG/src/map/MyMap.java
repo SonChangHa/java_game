@@ -1,6 +1,8 @@
 package map;
 
 import character.*;
+import main.TimeThread;
+
 import java.util.Random;
 
 public class MyMap {
@@ -167,7 +169,7 @@ public class MyMap {
 		for (int a = 0; a < 50; a++)
 			System.out.println();
 
-		System.out.println(player.nowmap.name);
+		System.out.println(player.nowmap.name + "  " + TimeThread.time + ":00 " + TimeThread.day);
 		for (int down = 0; down < player.nowmap.map.length; down++) {
 			for (int side = 0; side < player.nowmap.map[0].length; side++) {
 				System.out.print(player.nowmap.map[down][side]);

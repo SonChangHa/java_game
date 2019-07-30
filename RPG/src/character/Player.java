@@ -1,16 +1,29 @@
 package character;
 
 import map.MyMap;
+import music.*;
 import skill.*;
 import use_item.*;
 
 import java.util.*;
+
+import battleThread.RockBattleThread;
 import equip_Item.*;
-import main.Battle_thread;
 
 public class Player extends Character {
 	
 	public boolean battleSwitch = false;
+	
+	//public BattleMusic battle;
+	public CastleMusic castle;
+	public PorestMusic porest;
+	public MusicThread music;
+	public RockMusic rock;
+	
+	public int lv = 1;
+	public int exp = 300;
+	public int nowexp = 0;
+	public int gold = 100;
 	
 	public int nowhp; 
 	public int nowmp;
@@ -20,6 +33,8 @@ public class Player extends Character {
 	public Weapon weapon;
 	public Armor armor;
 	public MyMap nowmap;
+	
+	public SwordSkill swordSkill = null;
 
 	public ArrayList<Armor> armor_inventory = new ArrayList<Armor>();// 장비아이템
 	public ArrayList<Weapon> weapon_inventory = new ArrayList<Weapon>();// 장비아이템
@@ -44,6 +59,7 @@ public class Player extends Character {
 		System.out.println("체력 : " + this.nowhp + "/" + this.hp + ", 마나 : " + this.nowmp + "/" + this.mp);
 		System.out.println("공격력 : " + this.ad + ", 방어력 : " + this.dp);
 		System.out.println("크리티컬 확률 : " + this.criticalRate + " %" + ", 회피율 : " + this.avd + " %");
+		System.out.println("경험치 : " + this.nowexp + "/" + this.exp + ", 골드 : " + this.gold);
 		System.out.println("────────────────────────────────────────");
 		System.out.println("");
 		System.out.println("아이템 : 1, 스킬 : 2, 맵으로 돌아가기 : 기타 숫자");
@@ -113,6 +129,7 @@ public class Player extends Character {
 			System.out.println("────────────────────────────────────────");
 			System.out.println("현재 장착중인 무기 : " + this.weapon.name);
 			System.out.println("추가 공격력 : " + this.weapon.ad + ", 크리티컬 확률 : " + this.weapon.criticalRate);
+		//	System.out.println("무기 스킬 = " + this.swordSkill.name + ", 소모 마나 : " + this.swordSkill.useMp + ", 데미지 : " + this.swordSkill.damage + ", 스킬 설명 : " + this.swordSkill.what);
 			System.out.println("────────────────────────────────────────");
 			System.out.println("");
 
@@ -259,6 +276,14 @@ public class Player extends Character {
 		
 		battleSwitch = true;
 		
+		music.suspend();
+		porest.suspend();
+		rock.suspend();
+		castle.suspend();
+		BattleMusic battle = new BattleMusic();
+		battle.start();
+		
+		
 		Scanner scan = new Scanner(System.in);
 		int input;
 		for (int a = 0; a < 50; a++)
@@ -267,7 +292,8 @@ public class Player extends Character {
 		System.out.println(monster.name + "과 만났습니다!");
 
 		while (true) {
-			System.out.println("공격 : 1, 몬스터 정보 : 2, 스킬 : 3, 아이템 : 4, 도주 : 5");
+
+			System.out.println("공격 : 1, 몬스터 정보 : 2, " + this.swordSkill.name + "(" + this.swordSkill.useMp + ") : 3, 회복 스킬 : 4, 아이템 : 5, 도주 : 6");
 			System.out.println("어떤 행동을 하시겠습니까?");
 			input = scan.nextInt();
 			
@@ -284,10 +310,14 @@ public class Player extends Character {
 				continue;
 				
 			case 3:
+				this.swordSkill.swordSkill(monster);
+				break;
+				
+			case 4:
 				this.show_healskill();
 				break;
 			
-			case 4:
+			case 5:
 				this.show_portion();
 				break;
 				
@@ -296,6 +326,7 @@ public class Player extends Character {
 			default:
 				System.out.println("간신히 도망쳤습니다!");
 				this.nowmap.map[this.yLoca][this.xLoca] = this.art;
+				battle.stop();
 				return;
 			}
 			
@@ -304,9 +335,16 @@ public class Player extends Character {
 			if (monster.nowhp <= 0) {
 				// 몬스터 죽었음.
 				System.out.println("몬스터를 물리쳤습니다.");
+				this.gold += monster.dropGold;
+				this.nowexp += monster.dropExp;
+				System.out.println("골드를 획득하였습니다! +" + monster.dropGold);
+				System.out.println("경험치를 획득하였습니다! +" + monster.dropExp);
+				if(this.nowexp >= this.exp)
+					this.levelUp();
 				this.nowmap.map[monster.yLoca][monster.xLoca] = this.art;
 				monster = null;
 				battleSwitch = false;
+				battle.suspend();
 				return;
 			}
 			monster.monster_battle_att();
@@ -395,6 +433,20 @@ public class Player extends Character {
 
 		monster.nowhp -= this.damage; // 남은 HP는 HP 빼기 데미지로
 		System.out.println("-" + this.damage + "!!!");
+	}
+	
+	public void levelUp(){
+		while(this.nowexp < this.exp) {
+			this.lv++;
+			this.exp += 100;
+			this.hp += 50;
+			this.mp += 50;
+			this.ad += 5;
+			this.dp += 5;
+			System.out.println("레벨이 상승하였습니다!");
+			System.out.println("스텟이 변화하였습니다.");
+		}
+		
 	}
 
 }

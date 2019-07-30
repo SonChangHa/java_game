@@ -1,16 +1,20 @@
 package equip_Item;
 
 import character.Player;
+import skill.SwordSkill;
 
 public class Weapon extends Equip_item {
 
 	public int ad;
 	public int criticalRate;
+	public SwordSkill swordSkill;
+	public static Player player;
 
-	public Weapon(String name, int ad, int criticalRate) {
-		super(name);
+	public Weapon(String name, int pay, int ad, int criticalRate, SwordSkill swordSkill) {
+		super(name, pay);
 		this.ad = ad;
 		this.criticalRate = criticalRate;
+		this.swordSkill = swordSkill; 
 	}
 
 	public static void weapon_equip(Weapon weapon) {
@@ -32,6 +36,8 @@ public class Weapon extends Equip_item {
 		player.ad += weapon.ad;
 		player.criticalRate += weapon.criticalRate;
 		player.weapon = weapon;
+		
+		player.swordSkill = weapon.swordSkill;
 		System.out.println(weapon.name + "을 장착하였습니다.");
 
 	}

@@ -6,12 +6,17 @@ public class Monster extends Character {
 
 	public static Player player;
 	public MyMap map;
+	
+	public int dropExp;
+	public int dropGold;
 
 	public Monster(String name, int hp, int mp, int ad, int dp, int criticalRate, int avd, int xLoca, int yLoca,
-			String art) {
+			String art, int dropExp, int dropGold) {
 		super(name, hp, mp, ad, dp, criticalRate, avd, xLoca, yLoca, art);
 		this.nowhp = hp;
 		this.nowmp = mp;
+		this.dropExp = dropExp;
+		this.dropGold = dropGold;
 	}
 
 	// 몬스터가 플레이어를 공격

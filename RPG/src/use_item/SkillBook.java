@@ -7,8 +7,8 @@ public class SkillBook extends Use_item {
 
 	public Skill skill;
 	
-	public SkillBook(String name, Skill skill) {
-		super(name);
+	public SkillBook(String name, int pay, Skill skill) {
+		super(name, pay);
 		this.skill = skill;
 	}
 	

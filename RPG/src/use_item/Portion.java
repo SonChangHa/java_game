@@ -6,8 +6,8 @@ public class Portion extends Use_item {
 	public int healMp;
 	public int many;
 
-	public Portion(String name, int many, int healHp, int healMp) {
-		super(name);
+	public Portion(String name, int pay, int many, int healHp, int healMp) {
+		super(name, pay);
 		this.many = many;
 		this.healHp = healHp;
 		this.healMp = healMp;

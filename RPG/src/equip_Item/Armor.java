@@ -9,8 +9,8 @@ public class Armor extends Equip_item {
 	public int avd;
 
 
-	public Armor(String name, int hp, int dp, int avd) {
-		super(name);
+	public Armor(String name, int pay, int hp, int dp, int avd) {
+		super(name, pay);
 		this.hp = hp;
 		this.dp = dp;
 		this.avd = avd;
