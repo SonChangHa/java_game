@@ -74,6 +74,7 @@ public class NPC extends Character {
 		System.out.println("────────────────────────────────────────");
 		System.out.println("구매하고 싶은 물건의 숫자를 입력해줘! 이외의 숫자를 입력하면 맵으로 돌아가!");
 		input = scan.nextInt();
+		i-= 1;
 		
 		if (input > 0 && input <= i && npc_weapon_inventory.size() != 0) {
 			if(npc_weapon_inventory.get(input - 1).pay <= player.gold) {
